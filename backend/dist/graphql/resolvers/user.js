@@ -32,14 +32,12 @@ const resolvers = {
         createUsername: async function createUsername(_, args, context) {
             const { session, prisma } = context;
             const { username } = args;
-            console.log(username);
             if (!session?.user) {
                 return {
                     error: "Not authorized",
                 };
             }
             const { id } = session?.user;
-            console.log("ID", id);
             return await verifyAndCreateUsername({ userId: id, username }, prisma);
         },
     },
