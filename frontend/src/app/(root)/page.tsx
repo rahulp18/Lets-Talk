@@ -1,16 +1,17 @@
- 
-import ProtectedPage from '@/components/ProtectedPage'
-import React from 'react'
- 
-const HomePage = () => {
- 
+import ProtectedPage from '@/components/ProtectedPage';
+
+import React from 'react';
+
+const HomePage = async ({ searchParams }: { searchParams: string }) => {
+  const { conversationId } = searchParams;
+
   return (
     <ProtectedPage>
       <div className="">
-        <h1 className="">Hello I am The chat page</h1>
+        {conversationId ? conversationId : <div>No conversation id</div>}
       </div>
     </ProtectedPage>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

@@ -12,6 +12,7 @@ import {
   SearchedUser,
 } from '@/utils/types';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { useSession } from 'next-auth/react';
 import CreateConversations from '../graphql/operations/conversation';
@@ -27,7 +28,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, isOpen }) => {
     SearchUsersInput
   >(UserOperations.Queries.searchUsers);
   const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
-
+  const router = useRouter();
   // Mutaions
   const [createConversation, { loading: createLoading }] = useMutation<
     CreateConversationData,
@@ -62,6 +63,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, isOpen }) => {
         variables: { participantIds: paritipantIds },
       });
       console.log('Here is Data', data);
+      if (!data?.createConversation) {
+        throw new Error('Failed to create conversation');
+      }
+      const { conversationId } = data?.createConversation;
+      router.push(`/?conversationId=${conversationId}`);
+      setParticipants([]);
+      onClose();
     } catch (error: any) {
       console.log(error.message);
     }
